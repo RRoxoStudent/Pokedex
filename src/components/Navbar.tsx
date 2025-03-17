@@ -3,16 +3,12 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchAppBarProps {
   onSearch: (searchValue: string) => void;
 }
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -40,11 +36,10 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
+  color: 'black',
   width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     [theme.breakpoints.up('sm')]: {
@@ -56,22 +51,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar({onSearch}: SearchAppBarProps) {
-
-const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  onSearch(event.target.value); 
-};
+export default function SearchAppBar({ onSearch }: SearchAppBarProps) {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(event.target.value);  // Passa o valor da pesquisa para o componente pai
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "black" }}>
         <Toolbar sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          
-          {/* Ícones e Logo */}
+          {/* Icons and Logo */}
           <Box component="img" src="src\assets\pokebola.png" height="3em" alt="Pokeball" />
-          <Box component="img" src="src\assets\International-Pokemon-logo.png" height="8em" alt="PokémonLog" />
+          <Box component="img" src="src\assets\International-Pokemon-logo.png" height="8em" alt="PokemonLogo" />
 
-          {/* Campo de pesquisa */}
+          {/* Search Bar */}
           <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
             <Box
               sx={{
@@ -83,10 +76,10 @@ const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                 width: "250px",
               }}
             >
-          <SearchIcon sx={{ color: "gray", marginRight: "8px" }} />
-              <InputBase
+              <SearchIcon sx={{ color: "gray", marginRight: "8px" }} />
+              <StyledInputBase
                 placeholder="Search..."
-                sx={{ flex: 1 }}
+                onChange={handleSearchChange}  // Call the onChange function
                 inputProps={{ "aria-label": "search" }}
               />
             </Box>

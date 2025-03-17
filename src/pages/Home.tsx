@@ -1,10 +1,8 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Grid, Container } from "@mui/material";
 import { staticPokemonList } from "../utils/data"; // Lista estática dos Pokémon
 import PokemonCard from "../components/PokeCard";
 import Navbar from "../components/Navbar";
-
-import stylesHome from "../styles/Home.module.css";
 
 const Home = () => {
   // State for the search value
@@ -15,15 +13,15 @@ const Home = () => {
     return staticPokemonList.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
     );
-  }, [searchValue]); 
+  }, [searchValue]); //  searchValue dependenci
 
-  
+  //Function that will be called to update the search value
   const handleSearch = (value: string) => {
-    setSearchValue(value); 
+    setSearchValue(value);  
   };
 
   return (
-    <>
+    <div>
       <Navbar onSearch={handleSearch} /> 
       <Container>
         <Grid container spacing={4}>
@@ -41,7 +39,7 @@ const Home = () => {
           )}
         </Grid>
       </Container>
-    </>
+    </div>
   );
 };
 
