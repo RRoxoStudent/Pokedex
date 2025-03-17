@@ -5,17 +5,21 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Icon from '@mdi/react';
+import { mdiHeartOutline } from '@mdi/js'
 
 
 interface PokeCardProps{
   id: number;
   name: string;
   sprites: string;
+  isFavorite: boolean
+  onToggleFavorites: () => void;
 
 }
 
 
-const PokemonCard = ({ id, name, sprites } : PokeCardProps) => {
+const PokemonCard = ({ id, name, sprites, isFavorite, onToggleFavorites } : PokeCardProps) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -33,7 +37,9 @@ const PokemonCard = ({ id, name, sprites } : PokeCardProps) => {
       </CardContent>
       <CardActions>
         
-        <Button size="small">Add to Favorites</Button>
+        <Button onClick={onToggleFavorite} size="small">Add to Favorites< Icon path={mdiHeartOutline} size={1} />{isFavorite ? 
+        <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </Button>
       </CardActions>
     </Card>
   );

@@ -3,10 +3,38 @@ import { Grid, Container } from "@mui/material";
 import { staticPokemonList } from "../utils/data"; // Lista estática dos Pokémon
 import PokemonCard from "../components/PokeCard";
 import Navbar from "../components/Navbar";
+import { stringify } from "querystring";
 
 const Home = () => {
   // State for the search value
   const [searchValue, setSearchValue] = useState<string>("");
+
+  //State for the favorite array
+  const [favorites, setFavorites] =useState<number[]>([]);
+
+
+// Load favorites from localStorage when starting the app
+  const storedFavorites = useMemo(() => {
+  return localStorage.getItem("favorites");
+}, []);
+
+// Save favorites in localStorage every time you change
+useMemo(() => {
+  localStorage.setItem("favorites", JSON.stringify(favorites))
+},[favorites]);
+
+//Add or remove from favorites function 
+const toggleFavorite = (pokemonId: number) => {
+  setFavorites((prev) => {
+    if (prev.includes(pokemonId)) {
+      return prev.filter((id) => id !== pokemonId); // Remove
+    } else {
+      return [...prev, pokemonId]; // Add
+    }
+  });
+};
+
+
 
   // State for filtered results based on the search value
   const filteredPokemon = useMemo(() => {
@@ -32,6 +60,8 @@ const Home = () => {
                 id={pokemon.id}
                 name={pokemon.name}
                 sprites={pokemon.sprites.front_default}
+                isFavorite={pokemon.isFavorite}
+                onToggleFavorites={pokemon.onToggleFavorites}
               />
             ))
           ) : (

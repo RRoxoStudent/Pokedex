@@ -6,6 +6,8 @@ export interface PokemonListItem {
 export interface Pokemon {
     id: number;
     name: string;
+    isFavorite: boolean;
+    onToggleFavorites: () => void;
     sprites: {
         front_default: string;
 };
