@@ -9,6 +9,11 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 
+interface SearchAppBarProps {
+  onSearch: (searchValue: string) => void;
+}
+
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -51,15 +56,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+export default function SearchAppBar({onSearch}: SearchAppBarProps) {
+
+const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  onSearch(event.target.value); 
+};
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "black" }}>
         <Toolbar sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           
           {/* Ícones e Logo */}
-          <Box component="img" src="src\assets\pokebola.png" height="3em" alt="Pokebola" />
-          <Box component="img" src="src\assets\International-Pokemon-logo.png" height="8em" alt="Logo Pokémon" />
+          <Box component="img" src="src\assets\pokebola.png" height="3em" alt="Pokeball" />
+          <Box component="img" src="src\assets\International-Pokemon-logo.png" height="8em" alt="PokémonLog" />
 
           {/* Campo de pesquisa */}
           <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
@@ -68,8 +78,8 @@ export default function SearchAppBar() {
                 display: "flex",
                 alignItems: "center",
                 backgroundColor: "white",
-                borderRadius: "4px",
-                padding: "4px 8px",
+                borderRadius: "5px",
+                padding: "2px 8px",
                 width: "250px",
               }}
             >

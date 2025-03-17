@@ -1,39 +1,48 @@
-import { useEffect, useState } from "react";
-import { useMemo } from 'react';
-import { Grid, Container, CircularProgress } from "@mui/material";
-import { getPokemonList, getPokemonDetails } from "../api/pokemonApi";
-import { Pokemon, PokemonListItem } from "../types/pokemon";
+import { useEffect, useState, useMemo } from "react";
+import { Grid, Container } from "@mui/material";
+import { staticPokemonList } from "../utils/data"; // Lista estática dos Pokémon
 import PokemonCard from "../components/PokeCard";
-import { staticPokemonList } from "../utils/data";
+import Navbar from "../components/Navbar";
 
+import stylesHome from "../styles/Home.module.css";
 
 const Home = () => {
+  // State for the search value
+  const [searchValue, setSearchValue] = useState<string>("");
 
-    //State para o valor da pesquisa
-    const[searchValue, setSearchValue] = useState<string>(" ");
-    //State para os resultados filtrados
- 
-    const filteredPokemon = useMemo(() => {
-      return staticPokemonList.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
-      );
-    }, [staticPokemonList, searchValue]);
+  // State for filtered results based on the search value
+  const filteredPokemon = useMemo(() => {
+    return staticPokemonList.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
+    );
+  }, [searchValue]); 
 
-        const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchValue(event.target.value);
-          };
-          console.log(filteredPokemon);
-          return (
-            <div>
-                {filteredPokemon.length > 0 ? (
-                    filteredPokemon.map((pokemon) => (
-                        <PokemonCard key={pokemon.id} id={pokemon.id} name={pokemon.name} sprites={pokemon.sprites.front_default} />
-                    ))
-                ) : (
-                    <p>Nenhum Pokémon encontrado!</p>
-                )}
-            </div>
-        );
+  
+  const handleSearch = (value: string) => {
+    setSearchValue(value); 
+  };
 
+  return (
+    <>
+      <Navbar onSearch={handleSearch} /> 
+      <Container>
+        <Grid container spacing={4}>
+          {filteredPokemon.length > 0 ? (
+            filteredPokemon.map((pokemon) => (
+              <PokemonCard
+                key={pokemon.id}
+                id={pokemon.id}
+                name={pokemon.name}
+                sprites={pokemon.sprites.front_default}
+              />
+            ))
+          ) : (
+            <p>Nenhum Pokémon encontrado!</p>
+          )}
+        </Grid>
+      </Container>
+    </>
+  );
 };
+
 export default Home;

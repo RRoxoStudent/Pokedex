@@ -7,8 +7,8 @@ import NavBar from '../components/Navbar';
 export function App() {
   return (
     <div>
-      <NavBar />
-       <Home />
+      {/* <NavBar onSearch={(searchValue: string) => console.log(searchValue)} /> */}
+      <Home />
     </div>
   );
 }

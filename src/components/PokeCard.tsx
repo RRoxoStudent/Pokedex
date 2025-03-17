@@ -19,7 +19,7 @@ const PokemonCard = ({ id, name, sprites } : PokeCardProps) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
-        sx={{ height: 140 }}        
+        sx={{ height: 200 }}        
         image={sprites}
         title={name}
       />
@@ -33,8 +33,7 @@ const PokemonCard = ({ id, name, sprites } : PokeCardProps) => {
       </CardContent>
       <CardActions>
         
-        <Button size="small">Add to 
-        Favorites</Button>
+        <Button size="small">Add to Favorites</Button>
       </CardActions>
     </Card>
   );
