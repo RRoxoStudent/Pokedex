@@ -3,11 +3,10 @@ import styles from './app.module.css';
 import Home from '../pages/Home';
 import NavBar from '../components/Navbar';
 
-
 export function App() {
   return (
     <div>
-         <Home />
+      <Home />
     </div>
   );
 }

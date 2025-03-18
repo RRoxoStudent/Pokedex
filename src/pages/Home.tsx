@@ -1,40 +1,43 @@
-import { useState, useMemo } from "react";
-import { Grid, Container } from "@mui/material";
-import { staticPokemonList } from "../utils/data"; // Lista estática dos Pokémon
-import PokemonCard from "../components/PokeCard";
-import Navbar from "../components/Navbar";
-import { stringify } from "querystring";
+import { useState, useMemo, useCallback } from 'react';
+import { Grid, Container } from '@mui/material';
+import { staticPokemonList } from '../utils/data'; // Lista estática dos Pokémon
+import PokemonCard from '../components/PokeCard';
+import Navbar from '../components/Navbar';
+import { stringify } from 'querystring';
 
 const Home = () => {
   // State for the search value
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
 
   //State for the favorite array
-  const [favorites, setFavorites] =useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
-
-// Load favorites from localStorage when starting the app
+  // Load favorites from localStorage when starting the app
   const storedFavorites = useMemo(() => {
-  return localStorage.getItem("favorites");
-}, []);
-
-// Save favorites in localStorage every time you change
-useMemo(() => {
-  localStorage.setItem("favorites", JSON.stringify(favorites))
-},[favorites]);
-
-//Add or remove from favorites function 
-const toggleFavorite = (pokemonId: number) => {
-  setFavorites((prev) => {
-    if (prev.includes(pokemonId)) {
-      return prev.filter((id) => id !== pokemonId); // Remove
+    const favorites = localStorage.getItem('favorites');
+    if (!favorites) {
+      return [];
     } else {
-      return [...prev, pokemonId]; // Add
+      const parseFavorites = JSON.parse(favorites);
+      return parseFavorites as number[];
     }
-  });
-};
+  }, []);
 
+  // Save favorites in localStorage every time you change
+  const saveFavorite = useCallback(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
+  //Add or remove from favorites function
+  const toggleFavorite = (pokemonId: number) => {
+    setFavorites((prev) => {
+      if (prev.includes(pokemonId)) {
+        return prev.filter((id) => id !== pokemonId); // Remove
+      } else {
+        return [...prev, pokemonId]; // Add
+      }
+    });
+  };
 
   // State for filtered results based on the search value
   const filteredPokemon = useMemo(() => {
@@ -45,12 +48,12 @@ const toggleFavorite = (pokemonId: number) => {
 
   //Function that will be called to update the search value
   const handleSearch = (value: string) => {
-    setSearchValue(value);  
+    setSearchValue(value);
   };
 
   return (
     <div>
-      <Navbar onSearch={handleSearch} /> 
+      <Navbar onSearch={handleSearch} />
       <Container>
         <Grid container spacing={4}>
           {filteredPokemon.length > 0 ? (
@@ -60,8 +63,10 @@ const toggleFavorite = (pokemonId: number) => {
                 id={pokemon.id}
                 name={pokemon.name}
                 sprites={pokemon.sprites.front_default}
-                isFavorite={pokemon.isFavorite}
-                onToggleFavorites={pokemon.onToggleFavorites}
+                isFavorite={favorites.includes(pokemon.id)}
+                onToggleFavorites={() => {
+                  toggleFavorite(pokemon.id);
+                }}
               />
             ))
           ) : (

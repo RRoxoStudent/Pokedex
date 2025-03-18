@@ -6,43 +6,47 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Icon from '@mdi/react';
-import { mdiHeartOutline } from '@mdi/js'
+import { mdiHeartOutline } from '@mdi/js';
+import { mdiHeart } from '@mdi/js';
 
-
-interface PokeCardProps{
+interface PokeCardProps {
   id: number;
   name: string;
   sprites: string;
-  isFavorite: boolean
+  isFavorite: boolean;
   onToggleFavorites: () => void;
-
 }
 
-
-const PokemonCard = ({ id, name, sprites, isFavorite, onToggleFavorites } : PokeCardProps) => {
+const PokemonCard = ({
+  id,
+  name,
+  sprites,
+  isFavorite,
+  onToggleFavorites,
+}: PokeCardProps) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 200 }}        
-        image={sprites}
-        title={name}
-      />
+      <CardMedia sx={{ height: 200 }} image={sprites} title={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {name}
-        </Typography>    
+        </Typography>
         <Typography variant="body2" color="text.secondary">
           ID: {id}
-        </Typography>  
+        </Typography>
       </CardContent>
       <CardActions>
-        
-        <Button onClick={onToggleFavorite} size="small">Add to Favorites< Icon path={mdiHeartOutline} size={1} />{isFavorite ? 
-        <FavoriteIcon /> : <FavoriteBorderIcon />}
+        <Button onClick={onToggleFavorites} size="small">
+          Add to Favorites{' '}
+          {isFavorite ? (
+            <Icon path={mdiHeartOutline} size={1} />
+          ) : (
+            <Icon path={mdiHeart} size={1} />
+          )}
         </Button>
       </CardActions>
     </Card>
   );
-}
+};
 
 export default React.memo(PokemonCard);

@@ -53,34 +53,44 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar({ onSearch }: SearchAppBarProps) {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(event.target.value);  // Passa o valor da pesquisa para o componente pai
+    onSearch(event.target.value); // Passa o valor da pesquisa para o componente pai
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: "black" }}>
-        <Toolbar sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+      <AppBar position="static" sx={{ backgroundColor: 'black' }}>
+        <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {/* Icons and Logo */}
-          <Box component="img" src="src\assets\pokebola.png" height="3em" alt="Pokeball" />
-          <Box component="img" src="src\assets\International-Pokemon-logo.png" height="8em" alt="PokemonLogo" />
+          <Box
+            component="img"
+            src="src\assets\pokebola.png"
+            height="3em"
+            alt="Pokeball"
+          />
+          <Box
+            component="img"
+            src="src\assets\International-Pokemon-logo.png"
+            height="8em"
+            alt="PokemonLogo"
+          />
 
           {/* Search Bar */}
-          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "white",
-                borderRadius: "5px",
-                padding: "2px 8px",
-                width: "250px",
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: '5px',
+                padding: '2px 8px',
+                width: '250px',
               }}
             >
-              <SearchIcon sx={{ color: "gray", marginRight: "8px" }} />
+              <SearchIcon sx={{ color: 'gray', marginRight: '8px' }} />
               <StyledInputBase
                 placeholder="Search..."
-                onChange={handleSearchChange}  // Call the onChange function
-                inputProps={{ "aria-label": "search" }}
+                onChange={handleSearchChange} // Call the onChange function
+                inputProps={{ 'aria-label': 'search' }}
               />
             </Box>
           </Box>
