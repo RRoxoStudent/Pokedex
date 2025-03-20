@@ -1,60 +1,72 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Grid, Container } from '@mui/material';
+import { Grid, Container, Button } from '@mui/material';
 import { staticPokemonList } from '../utils/data'; // Lista estática dos Pokémon
 import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
 import { stringify } from 'querystring';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { addFavorite, removeFavorite } from '../store/favoritesSlice';
 
 const Home = () => {
-  // State for the search value
+  // Estado para a pesquisa
   const [searchValue, setSearchValue] = useState<string>('');
 
-  //State for the favorite array
-  const [favorites, setFavorites] = useState<number[]>([]);
+  // Estado local para alternar entre todos e favoritos
+  const [showFavorites, setShowFavorites] = useState(false);
 
-  // Load favorites from localStorage when starting the app
-  const storedFavorites = useMemo(() => {
-    const favorites = localStorage.getItem('favorites');
-    if (!favorites) {
-      return [];
-    } else {
-      const parseFavorites = JSON.parse(favorites);
-      return parseFavorites as number[];
-    }
-  }, []);
+  // Aceder aos favoritos do Redux
+  const favorites = useSelector((state: RootState) => state.favorites);
 
-  // Save favorites in localStorage every time you change
-  const saveFavorite = useCallback(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
+  // Dispatch para chamar ações do Redux
+  const dispatch = useDispatch();
 
-  //Add or remove from favorites function
-  const toggleFavorite = (pokemonId: number) => {
-    setFavorites((prev) => {
-      if (prev.includes(pokemonId)) {
-        return prev.filter((id) => id !== pokemonId); // Remove
-      } else {
-        return [...prev, pokemonId]; // Add
-      }
-    });
-  };
-
-  // State for filtered results based on the search value
+  // Filtra os Pokémon com base na pesquisa e no estado de favoritos
   const filteredPokemon = useMemo(() => {
-    return staticPokemonList.filter((pokemon) =>
+    const searchFiltered = staticPokemonList.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
     );
-  }, [searchValue]); //  searchValue dependenci
 
-  //Function that will be called to update the search value
+    if (showFavorites) {
+      return searchFiltered.filter((pokemon) => favorites.includes(pokemon.id));
+    }
+
+    return searchFiltered;
+  }, [searchValue, favorites, showFavorites]);
+
+  // Função de pesquisa vinda do Navbar
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
+  // Função para alternar favoritos no Redux
+  const toggleFavorite = useCallback(
+    (id: number) => {
+      if (favorites.includes(id)) {
+        dispatch(removeFavorite(id));
+      } else {
+        dispatch(addFavorite(id));
+      }
+    },
+    [favorites, dispatch]
+  );
+
   return (
     <div>
+      {/* Navbar com campo de pesquisa */}
       <Navbar onSearch={handleSearch} />
+
       <Container>
+        {/* Botão para alternar entre todos e favoritos */}
+        <Button
+          variant={showFavorites ? 'contained' : 'outlined'}
+          onClick={() => setShowFavorites((prev) => !prev)}
+          sx={{ marginY: 2 }}
+        >
+          {showFavorites ? 'Mostrar Todos' : 'Mostrar Favoritos'}
+        </Button>
+
+        {/* Grid de cards dos Pokémon */}
         <Grid container spacing={4}>
           {filteredPokemon.length > 0 ? (
             filteredPokemon.map((pokemon) => (
@@ -63,10 +75,8 @@ const Home = () => {
                 id={pokemon.id}
                 name={pokemon.name}
                 sprites={pokemon.sprites.front_default}
-                isFavorite={favorites.includes(pokemon.id)}
-                onToggleFavorites={() => {
-                  toggleFavorite(pokemon.id);
-                }}
+                isFavorite={favorites.includes(pokemon.id)} // Pega a flag direto do Redux
+                onToggleFavorites={() => toggleFavorite(pokemon.id)} // Alterna no Redux
               />
             ))
           ) : (
