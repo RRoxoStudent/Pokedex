@@ -39,9 +39,9 @@ const PokemonCard = ({
         <Button onClick={onToggleFavorites} size="small">
           Add to Favorites{' '}
           {isFavorite ? (
-            <Icon path={mdiHeartOutline} size={1} />
-          ) : (
             <Icon path={mdiHeart} size={1} />
+          ) : (
+            <Icon path={mdiHeartOutline} size={1} />
           )}
         </Button>
       </CardActions>

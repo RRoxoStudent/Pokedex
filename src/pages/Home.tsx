@@ -1,9 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { Grid, Container, Button } from '@mui/material';
 import { staticPokemonList } from '../utils/data'; // Lista estática dos Pokémon
 import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
-import { stringify } from 'querystring';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
@@ -13,13 +12,22 @@ const Home = () => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   // Estado local para alternar entre todos e favoritos
-  const [showFavorites, setShowFavorites] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(true);
 
   // Aceder aos favoritos do Redux
   const favorites = useSelector((state: RootState) => state.favorites);
 
   // Dispatch para chamar ações do Redux
   const dispatch = useDispatch();
+
+  // Função para alternar favorito no Redux
+  const toggleFavorite = (pokemonId: number) => {
+    if (favorites.includes(pokemonId)) {
+      dispatch(removeFavorite(pokemonId));
+    } else {
+      dispatch(addFavorite(pokemonId));
+    }
+  };
 
   // Filtra os Pokémon com base na pesquisa e no estado de favoritos
   const filteredPokemon = useMemo(() => {
@@ -38,18 +46,6 @@ const Home = () => {
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
-
-  // Função para alternar favoritos no Redux
-  const toggleFavorite = useCallback(
-    (id: number) => {
-      if (favorites.includes(id)) {
-        dispatch(removeFavorite(id));
-      } else {
-        dispatch(addFavorite(id));
-      }
-    },
-    [favorites, dispatch]
-  );
 
   return (
     <div>
@@ -80,7 +76,7 @@ const Home = () => {
               />
             ))
           ) : (
-            <p>Nenhum Pokémon encontrado!</p>
+            <h1>Nenhum Pokémon encontrado!</h1>
           )}
         </Grid>
       </Container>
