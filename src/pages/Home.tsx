@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Grid, Container, Button } from '@mui/material';
-import { staticPokemonList } from '../utils/data'; // Lista estática dos Pokémon
+import { Grid, Container } from '@mui/material'; // Removi o Button aqui
+import { staticPokemonList } from '../utils/data';
 import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,19 +8,12 @@ import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
 
 const Home = () => {
-  // Estado para a pesquisa
   const [searchValue, setSearchValue] = useState<string>('');
+  const [showFavorites, setShowFavorites] = useState(false);
 
-  // Estado local para alternar entre todos e favoritos
-  const [showFavorites, setShowFavorites] = useState(true);
-
-  // Aceder aos favoritos do Redux
   const favorites = useSelector((state: RootState) => state.favorites);
-
-  // Dispatch para chamar ações do Redux
   const dispatch = useDispatch();
 
-  // Função para alternar favorito no Redux
   const toggleFavorite = (pokemonId: number) => {
     if (favorites.includes(pokemonId)) {
       dispatch(removeFavorite(pokemonId));
@@ -29,7 +22,6 @@ const Home = () => {
     }
   };
 
-  // Filtra os Pokémon com base na pesquisa e no estado de favoritos
   const filteredPokemon = useMemo(() => {
     const searchFiltered = staticPokemonList.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
@@ -42,27 +34,20 @@ const Home = () => {
     return searchFiltered;
   }, [searchValue, favorites, showFavorites]);
 
-  // Função de pesquisa vinda do Navbar
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
   return (
     <div>
-      {/* Navbar com campo de pesquisa */}
-      <Navbar onSearch={handleSearch} />
+      <Navbar
+        onSearch={handleSearch}
+        showFavorites={showFavorites}
+        onToggleShowFavorites={() => setShowFavorites((prev) => !prev)}
+      />
 
       <Container>
-        {/* Botão para alternar entre todos e favoritos */}
-        <Button
-          variant={showFavorites ? 'contained' : 'outlined'}
-          onClick={() => setShowFavorites((prev) => !prev)}
-          sx={{ marginY: 2 }}
-        >
-          {showFavorites ? 'Mostrar Todos' : 'Mostrar Favoritos'}
-        </Button>
-
-        {/* Grid de cards dos Pokémon */}
+        {/* Agora só temos o Grid */}
         <Grid container spacing={4}>
           {filteredPokemon.length > 0 ? (
             filteredPokemon.map((pokemon) => (
@@ -71,12 +56,12 @@ const Home = () => {
                 id={pokemon.id}
                 name={pokemon.name}
                 sprites={pokemon.sprites.front_default}
-                isFavorite={favorites.includes(pokemon.id)} // Pega a flag direto do Redux
-                onToggleFavorites={() => toggleFavorite(pokemon.id)} // Alterna no Redux
+                isFavorite={favorites.includes(pokemon.id)}
+                onToggleFavorites={() => toggleFavorite(pokemon.id)}
               />
             ))
           ) : (
-            <h1>Nenhum Pokémon encontrado!</h1>
+            <h1>No Pokémon were found!</h1>
           )}
         </Grid>
       </Container>

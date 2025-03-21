@@ -25,7 +25,7 @@ const PokemonCard = ({
   onToggleFavorites,
 }: PokeCardProps) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card className="card" sx={{ maxWidth: 345 }}>
       <CardMedia sx={{ height: 200 }} image={sprites} title={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">

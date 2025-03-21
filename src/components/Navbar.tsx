@@ -5,9 +5,12 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-
+import Button from '@mui/material/Button'; // Importa o Button
+import './NavbarStyles.css';
 interface SearchAppBarProps {
   onSearch: (searchValue: string) => void;
+  showFavorites: boolean;
+  onToggleShowFavorites: () => void;
 }
 
 const Search = styled('div')(({ theme }) => ({
@@ -51,9 +54,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar({ onSearch }: SearchAppBarProps) {
+export default function SearchAppBar({
+  onSearch,
+  showFavorites,
+  onToggleShowFavorites,
+}: SearchAppBarProps) {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(event.target.value); // Passa o valor da pesquisa para o componente pai
+    onSearch(event.target.value);
   };
 
   return (
@@ -63,13 +70,13 @@ export default function SearchAppBar({ onSearch }: SearchAppBarProps) {
           {/* Icons and Logo */}
           <Box
             component="img"
-            src="src\assets\pokebola.png"
+            src="src/assets/pokebola.png"
             height="3em"
             alt="Pokeball"
           />
           <Box
             component="img"
-            src="src\assets\International-Pokemon-logo.png"
+            src="src/assets/International-Pokemon-logo.png"
             height="8em"
             alt="PokemonLogo"
           />
@@ -89,11 +96,21 @@ export default function SearchAppBar({ onSearch }: SearchAppBarProps) {
               <SearchIcon sx={{ color: 'gray', marginRight: '8px' }} />
               <StyledInputBase
                 placeholder="Search..."
-                onChange={handleSearchChange} // Call the onChange function
+                onChange={handleSearchChange}
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Box>
           </Box>
+
+          {/* Botão de favoritos */}
+          <Button
+            className="favoriteButton"
+            variant={showFavorites ? 'contained' : 'outlined'}
+            color="secondary"
+            onClick={onToggleShowFavorites}
+          >
+            {showFavorites ? 'Mostrar Todos' : 'Mostrar Favoritos'}
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
