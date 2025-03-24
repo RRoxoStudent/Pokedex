@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,36 +7,11 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button'; // Importa o Button
 import './NavbarStyles.css';
-interface SearchAppBarProps {
+interface NavbarProps {
   onSearch: (searchValue: string) => void;
   showFavorites: boolean;
   onToggleShowFavorites: () => void;
 }
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'black',
@@ -54,14 +29,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar({
+const Navbar = ({
   onSearch,
   showFavorites,
   onToggleShowFavorites,
-}: SearchAppBarProps) {
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(event.target.value);
-  };
+}: Readonly<NavbarProps>) => {
+  const handleSearchChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onSearch(event.target.value);
+    },
+    [onSearch]
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -115,4 +93,6 @@ export default function SearchAppBar({
       </AppBar>
     </Box>
   );
-}
+};
+
+export default React.memo(Navbar);

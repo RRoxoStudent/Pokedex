@@ -1,11 +1,12 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Grid, Container } from '@mui/material'; // Removi o Button aqui
-import { staticPokemonList } from '../utils/data';
+// import { staticPokemonList } from '../utils/data';
 import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
+import { useFetchPokemons } from '../hooks/useFetchPokemons';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState<string>('');
@@ -14,16 +15,12 @@ const Home = () => {
   const favorites = useSelector((state: RootState) => state.favorites);
   const dispatch = useDispatch();
 
-  const toggleFavorite = (pokemonId: number) => {
-    if (favorites.includes(pokemonId)) {
-      dispatch(removeFavorite(pokemonId));
-    } else {
-      dispatch(addFavorite(pokemonId));
-    }
-  };
+  //Hook personalizado que vai buscar os Pokémons
+  const { pokemons, loading, error } = useFetchPokemons(100, 0);
 
   const filteredPokemon = useMemo(() => {
-    const searchFiltered = staticPokemonList.filter((pokemon) =>
+    if (!pokemons) return []; //para o caso de o pokemon ser null ou undefined
+    const searchFiltered = pokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(searchValue.toLowerCase().trim())
     );
 
@@ -32,11 +29,22 @@ const Home = () => {
     }
 
     return searchFiltered;
-  }, [searchValue, favorites, showFavorites]);
+  }, [searchValue, favorites, showFavorites, pokemons]);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setSearchValue(value);
-  };
+  }, []);
+
+  const toggleFavorite = useCallback(
+    (pokemonId: number) => {
+      if (favorites.includes(pokemonId)) {
+        dispatch(removeFavorite(pokemonId));
+      } else {
+        dispatch(addFavorite(pokemonId));
+      }
+    },
+    [dispatch, favorites]
+  );
 
   return (
     <div>
@@ -47,26 +55,31 @@ const Home = () => {
       />
 
       <Container>
-        {/* Agora só temos o Grid */}
-        <Grid container spacing={4}>
-          {filteredPokemon.length > 0 ? (
-            filteredPokemon.map((pokemon) => (
-              <PokemonCard
-                key={pokemon.id}
-                id={pokemon.id}
-                name={pokemon.name}
-                sprites={pokemon.sprites.front_default}
-                isFavorite={favorites.includes(pokemon.id)}
-                onToggleFavorites={() => toggleFavorite(pokemon.id)}
-              />
-            ))
-          ) : (
-            <h1>No Pokémon were found!</h1>
-          )}
-        </Grid>
+        {loading && <h2>Loading Pokémons...</h2>}
+
+        {error && <h2>Error: {error}</h2>}
+
+        {!loading && !error && (
+          <Grid container spacing={4}>
+            {filteredPokemon.length > 0 ? (
+              filteredPokemon.map((pokemon) => (
+                <PokemonCard
+                  key={pokemon.id}
+                  id={pokemon.id}
+                  name={pokemon.name}
+                  sprites={pokemon.sprites.front_default}
+                  isFavorite={favorites.includes(pokemon.id)}
+                  onToggleFavorites={() => toggleFavorite(pokemon.id)}
+                />
+              ))
+            ) : (
+              <h1>No Pokémon were found!</h1>
+            )}
+          </Grid>
+        )}
       </Container>
     </div>
   );
 };
 
-export default Home;
+export default React.memo(Home);
