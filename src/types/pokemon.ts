@@ -15,3 +15,10 @@ export interface Pokemon {
     };
   }[];
 }
+
+export interface GetPokemonListResponse {
+  count: number;
+  next: string;
+  previous: null | string;
+  results: PokemonListItem[];
+}

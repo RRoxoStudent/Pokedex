@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { Pokemon, PokemonListItem } from '../types/pokemon';
+import {
+  GetPokemonListResponse,
+  Pokemon,
+  PokemonListItem,
+} from '../types/pokemon';
 
 const API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=100&offset=0';
 
@@ -7,7 +11,7 @@ export const getPokemonList = async (
   limit = 100,
   offset = 0
 ): Promise<PokemonListItem[]> => {
-  const response = await axios.get(
+  const response = await axios.get<GetPokemonListResponse>(
     `${API_URL}/pokemon?limit=${limit}&offset=${offset}`
   );
   return response.data.results; //para já so retorna nome e url de cada pokemon
