@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Icon from '@mdi/react';
 import { mdiHeartOutline } from '@mdi/js';
 import { mdiHeart } from '@mdi/js';
+import './PokeCardStyles.css';
 
 interface PokeCardProps {
   id: number;
@@ -29,7 +30,7 @@ const PokemonCard = ({
       <CardMedia sx={{ height: 200 }} image={sprites} title={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {name}
+          {name.charAt(0).toUpperCase() + name.slice(1)}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           ID: {id}
@@ -37,12 +38,15 @@ const PokemonCard = ({
       </CardContent>
       <CardActions>
         <Button onClick={onToggleFavorites} size="small">
-          Add to Favorites{' '}
+          {' '}
           {isFavorite ? (
             <Icon path={mdiHeart} size={1} />
           ) : (
             <Icon path={mdiHeartOutline} size={1} />
           )}
+        </Button>
+        <Button className="DetailButon" size="small">
+          Pokemon Details{' '}
         </Button>
       </CardActions>
     </Card>

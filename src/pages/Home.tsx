@@ -7,6 +7,7 @@ import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
 import { useFetchPokemons } from '../hooks/useFetchPokemons';
 import ErrorAlert from '../components/ErrorAlert';
+import '../styles.css';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState<string>('');
@@ -53,7 +54,7 @@ const Home = () => {
           />
         )}
 
-        <Grid container spacing={4}>
+        <Grid className="Grid_1" container spacing={5}>
           {!loading && !error && filteredPokemon.length > 0 ? (
             filteredPokemon.map((pokemon) => (
               <PokemonCard

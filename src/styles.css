@@ -4,9 +4,9 @@
   outline: none;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+  display: center;
 }
 
-/* You can add global styles to this file, and also import other style files */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -17,4 +17,10 @@ body {
 
 h1 {
   color: aliceblue;
+}
+
+.Grid_1 {
+  display: center;
+  border-top: 100px;
+  align-items: center;
 }
