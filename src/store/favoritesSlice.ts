@@ -1,21 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: number[] = JSON.parse(
-  localStorage.getItem('favorites') || '[]'
-);
+const initialState: number[] = [];
 
 export const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
     addFavorite: (state, action: PayloadAction<number>) => {
-      state.push(action.payload);
-      localStorage.setItem('favorites', JSON.stringify(state));
+      if (!state.includes(action.payload)) {
+        state.push(action.payload);
+      }
     },
     removeFavorite: (state, action: PayloadAction<number>) => {
-      const newState = state.filter((id) => id !== action.payload);
-      localStorage.setItem('favorites', JSON.stringify(newState));
-      return newState;
+      return state.filter((id) => id !== action.payload);
     },
   },
 });
