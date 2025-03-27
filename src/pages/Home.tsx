@@ -12,6 +12,7 @@ import '../styles.css';
 const Home = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [showFavorites, setShowFavorites] = useState(false);
+
   const { pokemons, loading, error } = useFetchPokemons(50, 0); // Buscar 50 Pokémons, a partir do primeiro.
 
   const favorites = useSelector((state: RootState) => state.favorites);
