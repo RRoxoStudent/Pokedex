@@ -83,8 +83,9 @@ const Navbar = ({
           {/* Botão de favoritos */}
           <Button
             className="favoriteButton"
-            variant={showFavorites ? 'contained' : 'outlined'}
-            color="secondary"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
             onClick={onToggleShowFavorites}
           >
             {showFavorites ? 'Mostrar Todos' : 'Mostrar Favoritos'}
