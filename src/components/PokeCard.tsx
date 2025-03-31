@@ -9,6 +9,7 @@ import Icon from '@mdi/react';
 import { mdiHeartOutline } from '@mdi/js';
 import { mdiHeart } from '@mdi/js';
 import './PokeCardStyles.css';
+import { Link } from 'react-router-dom';
 
 interface PokeCardProps {
   id: number;
@@ -27,7 +28,12 @@ const PokemonCard = ({
 }: PokeCardProps) => {
   return (
     <Card className="card" sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 200 }} image={sprites} title={name} />
+      <CardMedia
+        component="img"
+        sx={{ height: 200 }}
+        image={sprites}
+        title={name}
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {name.charAt(0).toUpperCase() + name.slice(1)}
@@ -45,7 +51,13 @@ const PokemonCard = ({
             <Icon path={mdiHeartOutline} size={1} />
           )}
         </Button>
-        <Button className="DetailButon" size="small">
+        <Button
+          className="DetailButon"
+          size="small"
+          component={Link}
+          to={`/pokemon/${id}`}
+          color="primary"
+        >
           Pokemon Details{' '}
         </Button>
       </CardActions>

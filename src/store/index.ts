@@ -10,6 +10,7 @@ const rootReducer = combineReducers({
   favorites: favoritesReducer,
 });
 
+//Configuração do persist
 const persistConfig = {
   key: 'root', // Chave usada no localStorage
   storage,
@@ -17,7 +18,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Criar a store com persistência
+// Cria a store com persistência
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -29,5 +30,6 @@ export const store = configureStore({
 // Criar o persistor
 export const persistor = persistStore(store);
 
+//Tipos do redux
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
