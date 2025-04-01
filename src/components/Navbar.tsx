@@ -7,7 +7,11 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button'; // Importa o Button
 import './NavbarStyles.css';
-import { Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Grid, SvgIcon } from '@mui/material';
+import Icon from '@mdi/react';
+import { mdiHomeCircle } from '@mdi/js';
+import { mdiHeart } from '@mdi/js';
 interface NavbarProps {
   onSearch: (searchValue: string) => void;
   showFavorites: boolean;
@@ -35,6 +39,7 @@ const Navbar = ({
   showFavorites,
   onToggleShowFavorites,
 }: Readonly<NavbarProps>) => {
+  const navigate = useNavigate();
   const handleSearchChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onSearch(event.target.value);
@@ -52,12 +57,16 @@ const Navbar = ({
             src="src/assets/pokebola.png"
             height="3em"
             alt="Pokeball"
+            sx={{ cursor: 'pointer' }}
+            onClick={() => navigate('/')}
           />
           <Box
             component="img"
             src="src/assets/International-Pokemon-logo.png"
             height="8em"
             alt="PokemonLogo"
+            sx={{ cursor: 'pointer' }}
+            onClick={() => navigate('/')}
           />
 
           {/* Search Bar */}
@@ -86,10 +95,21 @@ const Navbar = ({
             className="favoriteButton"
             variant="contained"
             color="primary"
-            sx={{ mt: 3 }}
-            onClick={onToggleShowFavorites}
+            onClick={() => navigate('/favorites')}
           >
-            {showFavorites ? 'Mostrar Todos' : 'Mostrar Favoritos'}
+            <SvgIcon>
+              <path d={mdiHeart} />
+            </SvgIcon>
+            Favorites
+          </Button>
+          {/* Botão para Home */}
+          <Button
+            className="HomeButton"
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('/')}
+          >
+            <Icon path={mdiHomeCircle} size={1} /> Home
           </Button>
         </Toolbar>
       </AppBar>

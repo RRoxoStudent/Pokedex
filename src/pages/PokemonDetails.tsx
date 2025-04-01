@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { mdiHeartOutline } from '@mdi/js';
 import { mdiHeart } from '@mdi/js';
-import Icon from '@mdi/react';
-import { mdiHomeCircle } from '@mdi/js';
+
 import {
   Container,
   Typography,
@@ -81,16 +80,6 @@ const PokemonDetails = () => {
                   <path d={mdiHeartOutline} />
                 </SvgIcon>
               )}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/')}
-            >
-              <Icon path={mdiHomeCircle} size={1} />
-              Home
             </Button>
           </Grid>
         </Grid>
