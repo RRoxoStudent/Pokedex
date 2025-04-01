@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getPokemonList, getPokemonDetails } from '../api/pokemonApi';
-import { Pokemon, PokemonListItem } from '../types/pokemon';
+import { getPokemonList } from '../api/pokemonApi';
+
 import useSWR from 'swr';
 
 interface PokemonCardData {

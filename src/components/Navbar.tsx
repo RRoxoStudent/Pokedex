@@ -7,6 +7,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button'; // Importa o Button
 import './NavbarStyles.css';
+import { Grid } from '@mui/material';
 interface NavbarProps {
   onSearch: (searchValue: string) => void;
   showFavorites: boolean;
