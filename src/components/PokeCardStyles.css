@@ -1,6 +1,30 @@
+.detail-button {
+  background-color: #1c5cd4;
+  color: white;
+  border-radius: 8px;
+  padding: 8px;
+  transition: background-color 0.3s;
+}
+
+.detail-button:hover {
+  background-color: #153a8c;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Espaço entre os cards */
+  padding: 20px;
+  margin: 10px;
+}
+
 .card {
-  display: grid;
-  grid-template-rows: 180px 100px;
-  gap: 20px 50px;
-  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px; /* Define uma largura fixa */
+  margin: 10px;
 }

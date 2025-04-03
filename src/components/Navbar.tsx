@@ -5,13 +5,15 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button'; // Importa o Button
-import './NavbarStyles.css';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { Grid, SvgIcon } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 import Icon from '@mdi/react';
-import { mdiHomeCircle } from '@mdi/js';
-import { mdiHeart } from '@mdi/js';
+import { mdiHomeCircle, mdiHeart } from '@mdi/js';
+
+import pokeball from '../assets/pokebola.png'; // Importação correta da imagem
+import pokemonLogo from '../assets/International-Pokemon-logo.png';
+import './NavbarStyles.css';
 interface NavbarProps {
   onSearch: (searchValue: string) => void;
   showFavorites: boolean;
@@ -49,12 +51,16 @@ const Navbar = ({
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: 'black' }}>
+      <AppBar
+        className="navbar"
+        position="static"
+        sx={{ backgroundColor: 'black' }}
+      >
         <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {/* Icons and Logo */}
           <Box
             component="img"
-            src="src/assets/pokebola.png"
+            src={pokeball}
             height="3em"
             alt="Pokeball"
             sx={{ cursor: 'pointer' }}
@@ -62,9 +68,9 @@ const Navbar = ({
           />
           <Box
             component="img"
-            src="src/assets/International-Pokemon-logo.png"
+            src={pokemonLogo}
             height="8em"
-            alt="PokemonLogo"
+            alt="Pokemon Logo"
             sx={{ cursor: 'pointer' }}
             onClick={() => navigate('/')}
           />
@@ -92,7 +98,7 @@ const Navbar = ({
 
           {/* Botão de favoritos */}
           <Button
-            className="favoriteButton"
+            className="nav-button"
             variant="contained"
             color="primary"
             onClick={() => navigate('/favorites')}
@@ -104,7 +110,7 @@ const Navbar = ({
           </Button>
           {/* Botão para Home */}
           <Button
-            className="HomeButton"
+            className="nav-button"
             variant="contained"
             color="primary"
             onClick={() => navigate('/')}

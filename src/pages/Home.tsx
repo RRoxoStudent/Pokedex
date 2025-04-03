@@ -1,22 +1,30 @@
 import React, { useMemo, useState } from 'react';
-import { Grid, Container } from '@mui/material';
+import { Grid, Container, Typography, Button } from '@mui/material';
 import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
-import { useFetchPokemons } from '../hooks/useFetchPokemons';
 import ErrorAlert from '../components/ErrorAlert';
-import '../styles.css';
+import { useFetchPaginatedPokemons } from '../hooks/useFetchPaginatedPokemons';
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [showFavorites, setShowFavorites] = useState(false);
 
-  const { pokemons, loading, error } = useFetchPokemons(50, 0); // Buscar 50 Pokémons, a partir do primeiro.
+  const { pokemons, loading, error, currentPage, setCurrentPage, totalPages } =
+    useFetchPaginatedPokemons();
 
   const favorites = useSelector((state: RootState) => state.favorites);
   const dispatch = useDispatch();
+
+  const toggleFavorite = (pokemonId: number) => {
+    if (favorites.includes(pokemonId)) {
+      dispatch(removeFavorite(pokemonId));
+    } else {
+      dispatch(addFavorite(pokemonId));
+    }
+  };
 
   const filteredPokemon = useMemo(() => {
     let result = pokemons.filter((pokemon) =>
@@ -30,14 +38,6 @@ const Home = () => {
     return result;
   }, [pokemons, searchValue, showFavorites, favorites]);
 
-  const toggleFavorite = (pokemonId: number) => {
-    if (favorites.includes(pokemonId)) {
-      dispatch(removeFavorite(pokemonId));
-    } else {
-      dispatch(addFavorite(pokemonId));
-    }
-  };
-
   return (
     <div>
       <Navbar
@@ -47,30 +47,62 @@ const Home = () => {
       />
 
       <Container>
-        {loading && <h3>Loading Pokémons...</h3>}
+        {loading && <Typography variant="h6">Loading Pokémons...</Typography>}
+
         {error && (
           <ErrorAlert
-            title="Error!!"
-            message="An unknown error as ocurred! Please try again later"
+            title="Error!"
+            message="An unknown error occurred! Please try again later."
           />
         )}
 
-        <Grid className="Grid_1" container spacing={5}>
-          {!loading && !error && filteredPokemon.length > 0 ? (
-            filteredPokemon.map((pokemon) => (
-              <PokemonCard
-                key={pokemon.id}
-                id={pokemon.id}
-                name={pokemon.nome}
-                sprites={pokemon.img}
-                isFavorite={favorites.includes(pokemon.id)}
-                onToggleFavorites={() => toggleFavorite(pokemon.id)}
-              />
-            ))
-          ) : (
-            <h1>No Pokémon were found!</h1>
-          )}
+        {!loading && !error && filteredPokemon.length === 0 && (
+          <Typography variant="h6" align="center">
+            Nenhum Pokémon encontrado!
+          </Typography>
+        )}
+
+        <Grid container spacing={5} justifyContent="center">
+          {filteredPokemon.map((pokemon) => (
+            <PokemonCard
+              key={pokemon.id}
+              id={pokemon.id}
+              name={pokemon.nome}
+              sprites={pokemon.img}
+              isFavorite={favorites.includes(pokemon.id)}
+              onToggleFavorites={() => toggleFavorite(pokemon.id)}
+            />
+          ))}
         </Grid>
+
+        {/* Paginação */}
+        {!showFavorites && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '30px',
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </Button>
+            <Typography variant="h6" style={{ margin: '0 20px' }}>
+              Página {currentPage} de {totalPages}
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Próxima
+            </Button>
+          </div>
+        )}
       </Container>
     </div>
   );

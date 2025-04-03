@@ -6,10 +6,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Icon from '@mdi/react';
-import { mdiHeartOutline } from '@mdi/js';
-import { mdiHeart } from '@mdi/js';
-import './PokeCardStyles.css';
+import { mdiHeartOutline, mdiHeart } from '@mdi/js';
 import { Link } from 'react-router-dom';
+import './PokeCardStyles.css';
 
 interface PokeCardProps {
   id: number;
@@ -19,18 +18,18 @@ interface PokeCardProps {
   onToggleFavorites: () => void;
 }
 
-const PokemonCard = ({
+const PokemonCard: React.FC<PokeCardProps> = ({
   id,
   name,
   sprites,
   isFavorite,
   onToggleFavorites,
-}: PokeCardProps) => {
+}) => {
   return (
-    <Card className="card" sx={{ maxWidth: 345 }}>
+    <Card className="card-container" sx={{ maxWidth: 345, maxHeight: 550 }}>
       <CardMedia
         component="img"
-        sx={{ height: 200 }}
+        sx={{ height: 300 }}
         image={sprites}
         title={name}
       />
@@ -44,21 +43,16 @@ const PokemonCard = ({
       </CardContent>
       <CardActions>
         <Button onClick={onToggleFavorites} size="small">
-          {' '}
-          {isFavorite ? (
-            <Icon path={mdiHeart} size={1} />
-          ) : (
-            <Icon path={mdiHeartOutline} size={1} />
-          )}
+          <Icon path={isFavorite ? mdiHeart : mdiHeartOutline} size={1} />
         </Button>
         <Button
-          className="DetailButon"
+          className="detail-button"
           size="small"
           component={Link}
           to={`/pokemon/${id}`}
           color="primary"
         >
-          Pokemon Details{' '}
+          Pokémon Details
         </Button>
       </CardActions>
     </Card>
