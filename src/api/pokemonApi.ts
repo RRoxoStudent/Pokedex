@@ -5,7 +5,7 @@ import {
   PokemonListItem,
 } from '../types/pokemon';
 
-const API_BASE_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0';
+const API_BASE_URL = 'https://pokeapi.co/api/v2';
 
 export const getPokemonList = async (
   limit = 100,

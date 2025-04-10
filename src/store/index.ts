@@ -30,6 +30,8 @@ export const store = configureStore({
 // Criar o persistor
 export const persistor = persistStore(store);
 
+localStorage.removeItem('persist:root');
+localStorage.removeItem('root');
 //Tipos do redux
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

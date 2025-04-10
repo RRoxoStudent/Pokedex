@@ -4,7 +4,11 @@ import PokemonCard from '../components/PokeCard';
 import Navbar from '../components/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
-import { addFavorite, removeFavorite } from '../store/favoritesSlice';
+import {
+  addFavorite,
+  favoritePokemon,
+  removeFavorite,
+} from '../store/favoritesSlice';
 import ErrorAlert from '../components/ErrorAlert';
 import { useFetchPaginatedPokemons } from '../hooks/useFetchPaginatedPokemons';
 
@@ -18,11 +22,11 @@ const Home = () => {
   const favorites = useSelector((state: RootState) => state.favorites);
   const dispatch = useDispatch();
 
-  const toggleFavorite = (pokemonId: number) => {
-    if (favorites.includes(pokemonId)) {
-      dispatch(removeFavorite(pokemonId));
+  const toggleFavorite = (pokemonFav: favoritePokemon) => {
+    if (favorites.find((fav) => fav.id === pokemonFav.id)) {
+      dispatch(removeFavorite(pokemonFav.id));
     } else {
-      dispatch(addFavorite(pokemonId));
+      dispatch(addFavorite(pokemonFav));
     }
   };
 
@@ -32,7 +36,9 @@ const Home = () => {
     );
 
     if (showFavorites) {
-      result = result.filter((pokemon) => favorites.includes(pokemon.id));
+      result = result.filter((pokemon) =>
+        favorites.find((fav) => fav.id === pokemon.id)
+      );
     }
 
     return result;
@@ -69,8 +75,12 @@ const Home = () => {
               id={pokemon.id}
               name={pokemon.nome}
               sprites={pokemon.img}
-              isFavorite={favorites.includes(pokemon.id)}
-              onToggleFavorites={() => toggleFavorite(pokemon.id)}
+              isFavorite={
+                favorites.find((fav) => fav.id === pokemon.id) !== undefined
+              }
+              onToggleFavorites={() =>
+                toggleFavorite({ id: pokemon.id, nome: pokemon.nome })
+              }
             />
           ))}
         </Grid>
