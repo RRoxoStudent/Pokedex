@@ -35,7 +35,9 @@ const PokemonDetails = () => {
   const favorites = useSelector((state: RootState) => state.favorites);
 
   // Verifica se o Pokémon atual está nos favoritos
-  const isFavorite = id ? favorites.includes(Number(id)) : false;
+  const isFavorite = id
+    ? favorites.some((fav) => fav.id === Number(id))
+    : false;
 
   // Alternar entre adicionar/remover favorito
   const toggleFavorite = () => {
@@ -43,8 +45,8 @@ const PokemonDetails = () => {
     const pokemonId = Number(id);
     if (isFavorite) {
       dispatch(removeFavorite(pokemonId));
-    } else {
-      dispatch(addFavorite(pokemonId));
+    } else if (pokemon) {
+      dispatch(addFavorite({ id: pokemonId, nome: pokemon.name }));
     }
   };
 
